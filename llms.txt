@@ -1,0 +1,57 @@
+# ClockInMath
+
+> Free time card calculator. Enter in and out times to get daily and weekly hours (h:mm and decimal), overtime, gross pay and a printable timesheet. No signup.
+
+URL: https://matt5516.github.io/time-card-calc/
+Last updated: 2026-10-15
+Cost: free, no signup, runs in the browser.
+
+## Key facts
+- Hours worked = out time minus in time minus unpaid break. 9:00 AM to 5:30 PM with a 30-minute break = 8:00 hours = 8.00 decimal hours.
+- Decimal hours = hours + minutes ÷ 60. 8:15 = 8.25; 7:45 = 7.75; 0.25 h = 15 min; 0.5 h = 30 min.
+- An out time earlier than the in time means the shift crossed midnight: 10:00 PM to 6:00 AM = 8:00 hours.
+- FLSA (U.S. DOL Fact Sheet #23): at least 1.5 times the regular rate for hours over 40 in a workweek; a workweek is a fixed 168-hour period and weeks are not averaged.
+- California (DIR overtime FAQ): 1.5x after 8 hours in a workday up to 12 and after 40 in a workweek; 2x after 12 hours in a day and after 8 hours on the 7th consecutive day of the workweek.
+- Example: 45 hours at $20 an hour under the weekly-40 rule = 40 × $20 + 5 × $30 = $950.00 gross.
+- Planned domain clockinmath.com is pending the owner's approval; the site is served at matt5516.github.io/time-card-calc.
+
+## Tools (one page each)
+- [Weekly time card calculator](https://matt5516.github.io/time-card-calc/time-card-calculator/): Free time card calculator. Type in and out times (9a, 5:30p, 1730) to get daily and weekly hours in h:mm and decimal, overtime, gross pay and a printable timesheet. How it works: Each day is out minus in (overnight shifts roll past midnight), minus your unpaid break. The week is the sum, shown as h:mm and decimal hours. Overtime follows the rule you pick: weekly over 40, daily over 8 and 12, or both.
+- [Hours between two times](https://matt5516.github.io/time-card-calc/hours-between-times/): Free calculator for the hours and minutes between two times. Handles overnight shifts and unpaid breaks, and shows the answer as h:mm and decimal hours. How it works: Duration = end minus start; if the end is earlier than the start it is the next day (add 24 hours). Net = duration minus break.
+- [Decimal hours converter](https://matt5516.github.io/time-card-calc/decimal-hours-converter/): Free decimal hours converter. Turn 8:15 into 8.25 and 7.75 into 7:45, with a quick chart of common values like 0.25 = 15 minutes and 0.5 = 30 minutes. How it works: Decimal hours = hours + minutes ÷ 60. To go back, multiply the decimal part by 60 to get minutes.
+- [Overtime pay calculator](https://matt5516.github.io/time-card-calc/overtime-pay-calculator/): Free overtime pay calculator. Enter regular, overtime and double-time hours with your hourly rate to see gross pay line by line at 1.5x, 2x or your own multiplier. How it works: Regular pay = regular hours × rate. Overtime pay = overtime hours × rate × 1.5. Double time = hours × rate × 2. Multipliers are editable.
+- [Biweekly timesheet](https://matt5516.github.io/time-card-calc/biweekly-timesheet/): Free biweekly timesheet calculator. Enter two weeks of in and out times to see hours per week and per pay period, with overtime counted in each workweek on its own. How it works: Each week is calculated on its own with the overtime rule you pick, then the two weeks are added. Hours are never averaged across weeks.
+
+## Guides
+- [How to calculate hours worked](https://matt5516.github.io/time-card-calc/how-to-calculate-hours-worked/): Hours worked = out time minus in time minus unpaid breaks. Worked examples for a standard day, an overnight shift and split shifts, from the ClockInMath calculator.
+- [Decimal time chart](https://matt5516.github.io/time-card-calc/decimal-time-chart/): Minutes to decimal hours chart for every minute from 0 to 60, plus common decimal hours like 0.25, 0.5 and 8.25 converted to hours and minutes.
+- [Federal overtime rules (FLSA)](https://matt5516.github.io/time-card-calc/overtime-rules-flsa/): The federal 40-hour overtime rule explained: time-and-a-half after 40 hours in a workweek, what a workweek is, no averaging across weeks, with pay examples.
+- [California daily overtime](https://matt5516.github.io/time-card-calc/california-daily-overtime/): How California daily overtime works: 1.5x after 8 hours a day, 2x after 12, the 40-hour week and the 7th consecutive day, with pay examples at $30 an hour.
+- [Hours to decimal for payroll](https://matt5516.github.io/time-card-calc/hours-to-decimal-converter-guide/): Why payroll uses decimal hours, how to convert hours and minutes to decimals, and the common 7:30 vs 7.30 mistake, with a pay example at $18 an hour.
+- [Time card examples](https://matt5516.github.io/time-card-calc/time-card-examples/): Four worked time card examples with hours, overtime and pay: a standard 9 to 5:30 week, a 12-hour overnight shift, a 50-hour overtime week and a California day.
+- [How to calculate overtime pay](https://matt5516.github.io/time-card-calc/how-to-calculate-overtime-pay/): Overtime pay = overtime hours × hourly rate × 1.5, added to regular pay. Worked examples for time-and-a-half and double time at $20 and $25 an hour.
+
+## FAQ
+### How do I calculate hours worked from in and out times?
+Subtract the in time from the out time, then subtract any unpaid break. 9:00 AM to 5:30 PM with a 30-minute lunch is 8 hours. If the out time is earlier than the in time, the shift crossed midnight and counts as the next day: 10 PM to 6 AM is 8 hours.
+
+### How do I convert hours and minutes to decimal hours?
+Divide the minutes by 60 and add the hours. 8 hours 15 minutes is 8.25 hours; 7 hours 45 minutes is 7.75 hours.
+
+### How is overtime calculated under federal law?
+The Fair Labor Standards Act requires covered, nonexempt employees to be paid at least 1.5 times their regular rate for hours worked over 40 in a workweek. A workweek is a fixed 168-hour period, and each week stands alone: hours are not averaged across weeks.
+
+### What is California daily overtime?
+In California, nonexempt employees generally earn 1.5 times their regular rate after 8 hours in a workday (up to 12) and after 40 in a workweek, and double time after 12 hours in a workday and after 8 hours on the seventh consecutive day of a workweek. Other states differ. Check the rules that apply to you.
+
+### Do weekends and holidays count as overtime automatically?
+Not under the federal FLSA. Weekend and holiday work is overtime only if it pushes the week past 40 hours, unless a contract, policy or state law says otherwise.
+
+### Does ClockInMath store my timesheet?
+It remembers your last times, hourly rate and overtime choices in this browser (local storage) so they survive a reload. It never saves your name and never sends anything to a server.
+
+## Related tools
+- [GradeOrFlip](https://gradeorflip.com/): Is it worth grading? Profit and break-even by grade for PSA, SGC, BGS and CGC.
+- [EnrollMath](https://enrollmath.com/): HSA vs PPO break-even, COBRA cost and marketplace comparison with 2026/2027 IRS limits.
+- [DynastyMath](https://dynastymath.com/): Start/sit calls, dynasty trade calculator with picks, and Sleeper league import.
+- [BagOrBulk](https://bagorbulk.com/): Concrete, gravel, mulch and topsoil calculators: yards, tons, bags, and whether bags or bulk costs less.
