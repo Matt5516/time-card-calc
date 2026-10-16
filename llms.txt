@@ -14,6 +14,8 @@ Cost: free, no signup, runs in the browser.
 - California (DIR overtime FAQ): 1.5x after 8 hours in a workday up to 12 and after 40 in a workweek; 2x after 12 hours in a day and after 8 hours on the 7th consecutive day of the workweek.
 - Example: 45 hours at $20 an hour under the weekly-40 rule = 40 × $20 + 5 × $30 = $950.00 gross.
 - Planned domain clockinmath.com is pending the owner's approval; the site is served at matt5516.github.io/time-card-calc.
+- Military time: PM hours add 12 (5:30 PM = 1730); 12:00 AM = 0000; 12:00 PM = 1200. 0600 is said 'zero six hundred'.
+- Hourly to annual (pre-tax) = rate × hours per week × weeks per year; full time is 2,080 hours. $20/hour = $41,600/year = $3,466.67/month = $1,600 biweekly.
 
 ## Tools (one page each)
 - [Weekly time card calculator](https://matt5516.github.io/time-card-calc/time-card-calculator/): Free time card calculator. Type in and out times (9a, 5:30p, 1730) to get daily and weekly hours in h:mm and decimal, overtime, gross pay and a printable timesheet. How it works: Each day is out minus in (overnight shifts roll past midnight), minus your unpaid break. The week is the sum, shown as h:mm and decimal hours. Overtime follows the rule you pick: weekly over 40, daily over 8 and 12, or both.
@@ -21,6 +23,8 @@ Cost: free, no signup, runs in the browser.
 - [Decimal hours converter](https://matt5516.github.io/time-card-calc/decimal-hours-converter/): Free decimal hours converter. Turn 8:15 into 8.25 and 7.75 into 7:45, with a quick chart of common values like 0.25 = 15 minutes and 0.5 = 30 minutes. How it works: Decimal hours = hours + minutes ÷ 60. To go back, multiply the decimal part by 60 to get minutes.
 - [Overtime pay calculator](https://matt5516.github.io/time-card-calc/overtime-pay-calculator/): Free overtime pay calculator. Enter regular, overtime and double-time hours with your hourly rate to see gross pay line by line at 1.5x, 2x or your own multiplier. How it works: Regular pay = regular hours × rate. Overtime pay = overtime hours × rate × 1.5. Double time = hours × rate × 2. Multipliers are editable.
 - [Biweekly timesheet](https://matt5516.github.io/time-card-calc/biweekly-timesheet/): Free biweekly timesheet calculator. Enter two weeks of in and out times to see hours per week and per pay period, with overtime counted in each workweek on its own. How it works: Each week is calculated on its own with the overtime rule you pick, then the two weeks are added. Hours are never averaged across weeks.
+- [Military time converter](https://matt5516.github.io/time-card-calc/military-time-converter/): Free military time converter: 12-hour to 24-hour time and back, live, with how to say it and a full 24-hour chart by hour and half hour. How it works: Add 12 to PM hours (1:00 PM = 13:00); AM hours stay the same except 12:00 AM = 00:00. Going back, subtract 12 from hours over 12.
+- [Hourly to salary calculator](https://matt5516.github.io/time-card-calc/hourly-to-salary-calculator/): Free hourly to salary calculator: convert an hourly rate to annual, monthly, biweekly and weekly pay (pre-tax), or a salary to hourly, with your hours and overtime. How it works: Annual = hourly rate × hours per week × weeks per year, plus overtime hours at 1.5×. Monthly = annual ÷ 12, biweekly = ÷ 26, weekly = ÷ 52. All figures are gross (pre-tax).
 
 ## Guides
 - [How to calculate hours worked](https://matt5516.github.io/time-card-calc/how-to-calculate-hours-worked/): Hours worked = out time minus in time minus unpaid breaks. Worked examples for a standard day, an overnight shift and split shifts, from the ClockInMath calculator.
@@ -30,6 +34,7 @@ Cost: free, no signup, runs in the browser.
 - [Hours to decimal for payroll](https://matt5516.github.io/time-card-calc/hours-to-decimal-converter-guide/): Why payroll uses decimal hours, how to convert hours and minutes to decimals, and the common 7:30 vs 7.30 mistake, with a pay example at $18 an hour.
 - [Time card examples](https://matt5516.github.io/time-card-calc/time-card-examples/): Four worked time card examples with hours, overtime and pay: a standard 9 to 5:30 week, a 12-hour overnight shift, a 50-hour overtime week and a California day.
 - [How to calculate overtime pay](https://matt5516.github.io/time-card-calc/how-to-calculate-overtime-pay/): Overtime pay = overtime hours × hourly rate × 1.5, added to regular pay. Worked examples for time-and-a-half and double time at $20 and $25 an hour.
+- [Hourly to annual salary chart](https://matt5516.github.io/time-card-calc/hourly-to-annual-salary-chart/): What $10 to $50 an hour is per year, month, two weeks and week, before taxes, at 40 hours a week and 52 weeks. $20 an hour is $41,600 a year.
 
 ## FAQ
 ### How do I calculate hours worked from in and out times?

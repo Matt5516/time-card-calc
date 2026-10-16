@@ -119,7 +119,42 @@ function overtimePay(o){
 /* Common conversion rows: every 5 minutes and quarter hours. */
 function minuteTable(step){ var r = []; for (var m = 0; m <= 60; m += step || 1) r.push({min: m, dec: m / 60}); return r; }
 
-var api = {parseTime: parseTime, parseDuration: parseDuration, durationMinutes: durationMinutes, formatHM: formatHM, formatClock: formatClock, toDecimal: toDecimal, fromDecimal: fromDecimal,
+/* ---- Military (24-hour) time ---- */
+/* parse24('1730' | '17:30' | '0905' | '9:05' | '17' | '2400') -> minutes after midnight, or null. '2400' is read as midnight (0). */
+function parse24(str){
+  if (str == null) return null; var s = String(str).trim().replace(/\s+/g, '').replace(/(hours|hrs|hr|h)$/i, ''); if (!s) return null;
+  var m = /^(\d{1,2}):?(\d{2})$/.exec(s), h, mi;
+  if (m) { h = +m[1]; mi = +m[2]; } else if (/^\d{1,2}$/.test(s)) { h = +s; mi = 0; } else return null;
+  if (mi > 59) return null; if (h === 24 && mi === 0) return 0; if (h > 23) return null;
+  return h * 60 + mi;
+}
+/* format24(min, colon) -> '17:30' (colon) or '1730' */
+function format24(min, colon){ min = ((Math.round(min) % DAY) + DAY) % DAY; var h = Math.floor(min / 60), m = min % 60, hh = (h < 10 ? '0' : '') + h, mm = (m < 10 ? '0' : '') + m; return colon ? hh + ':' + mm : hh + mm; }
+var WORDS = ['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen','twenty','twenty-one','twenty-two','twenty-three'];
+var TENS = {2:'twenty',3:'thirty',4:'forty',5:'fifty'}, ONES = ['','one','two','three','four','five','six','seven','eight','nine'];
+/* How a military time is spoken: 0600 'zero six hundred', 1730 'seventeen thirty', 0905 'zero nine zero five', 0000 'zero zero hundred'. */
+function spoken24(min){ min = ((Math.round(min) % DAY) + DAY) % DAY; var h = Math.floor(min / 60), m = min % 60;
+  var hw = h < 10 ? 'zero ' + WORDS[h] : WORDS[h];
+  if (m === 0) return hw + ' hundred';
+  var mw = m < 10 ? 'zero ' + WORDS[m] : m < 20 ? WORDS[m] : TENS[Math.floor(m / 10)] + (m % 10 ? '-' + ONES[m % 10] : '');
+  return hw + ' ' + mw; }
+/* chart24(step): rows for every 'step' minutes across the day: {min, h24:'13:30', mil:'1330', h12:'1:30 PM'} */
+function chart24(step){ var r = []; for (var m = 0; m < DAY; m += step || 60) r.push({min: m, h24: format24(m, true), mil: format24(m, false), h12: formatClock(m)}); return r; }
+
+/* ---- Hourly <-> salary (pre-tax). o: {rate, hours (per week, default 40), weeks (per year, default 52), otHours (extra hours per week, default 0), otMult (1.5)}
+   weekly pay = rate*hours + rate*otMult*otHours; annual = weekly * weeks; pay periods = annual / periods per year (52, 26, 24, 12). */
+function hourlyToSalary(o){
+  var rate = +o.rate || 0, h = o.hours == null || o.hours === '' ? 40 : +o.hours, w = o.weeks == null || o.weeks === '' ? 52 : +o.weeks, ot = +o.otHours || 0, om = o.otMult == null ? 1.5 : +o.otMult;
+  var weekWorked = rate * h + rate * om * ot, annual = weekWorked * w;
+  return {annual: r2(annual), monthly: r2(annual / 12), semimonthly: r2(annual / 24), biweekly: r2(annual / 26), weekly: r2(annual / 52), weekWorked: r2(weekWorked), daily: r2(rate * h / 5), otAnnual: r2(rate * om * ot * w), hoursYear: round((h + ot) * w, 2)};
+}
+/* salaryToHourly({annual, hours, weeks}) -> hourly rate = annual / (hours * weeks) */
+function salaryToHourly(o){
+  var a = +o.annual || 0, h = o.hours == null || o.hours === '' ? 40 : +o.hours, w = o.weeks == null || o.weeks === '' ? 52 : +o.weeks, d = h * w;
+  var hr = d > 0 ? a / d : 0; return {hourly: r2(hr), monthly: r2(a / 12), biweekly: r2(a / 26), weekly: r2(a / 52), hoursYear: round(d, 2)};
+}
+
+var api = {parse24: parse24, format24: format24, spoken24: spoken24, chart24: chart24, hourlyToSalary: hourlyToSalary, salaryToHourly: salaryToHourly, parseTime: parseTime, parseDuration: parseDuration, durationMinutes: durationMinutes, formatHM: formatHM, formatClock: formatClock, toDecimal: toDecimal, fromDecimal: fromDecimal,
   hoursBetween: hoursBetween, dayNet: dayNet, splitDay: splitDay, weekTotals: weekTotals, periodTotals: periodTotals, overtimePay: overtimePay, minuteTable: minuteTable, r2: r2, round: round};
 if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.TCCalc = api;
 })(typeof window !== 'undefined' ? window : this);
