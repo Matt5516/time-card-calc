@@ -3,7 +3,7 @@
 > Free time card calculator. Enter in and out times to get daily and weekly hours (h:mm and decimal), overtime, gross pay and a printable timesheet. No signup.
 
 URL: https://matt5516.github.io/time-card-calc/
-Last updated: 2026-10-15
+Last updated: 2026-10-17
 Cost: free, no signup, runs in the browser.
 
 ## Key facts
@@ -60,3 +60,4 @@ It remembers your last times, hourly rate and overtime choices in this browser (
 - [EnrollMath](https://enrollmath.com/): HSA vs PPO break-even, COBRA cost and marketplace comparison with 2026/2027 IRS limits.
 - [DynastyMath](https://dynastymath.com/): Start/sit calls, dynasty trade calculator with picks, and Sleeper league import.
 - [BagOrBulk](https://bagorbulk.com/): Concrete, gravel, mulch and topsoil calculators: yards, tons, bags, and whether bags or bulk costs less.
+- [CoatMath](https://matt5516.github.io/paint-calc/): Paint calculator that picks the cheapest cans to buy: gallons, quarts and 5-gallon buckets.
