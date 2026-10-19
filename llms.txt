@@ -148,3 +148,4 @@ It remembers your last times, hourly rate and overtime choices in this browser (
 - [DynastyMath](https://dynastymath.com/): Start/sit calls, dynasty trade calculator with picks, and Sleeper league import.
 - [BagOrBulk](https://bagorbulk.com/): Concrete, gravel, mulch and topsoil calculators: yards, tons, bags, and whether bags or bulk costs less.
 - [CoatMath](https://matt5516.github.io/paint-calc/): Paint calculator that picks the cheapest cans to buy: gallons, quarts and 5-gallon buckets.
+- [SidewallMath](https://matt5516.github.io/tire-size-calc/): Tire size calculator: compare two sizes, true speedometer, sizes that fit your wheel, regear and wheel offset.
