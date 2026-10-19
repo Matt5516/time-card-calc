@@ -11,6 +11,7 @@ Free time card calculator. Enter in and out times to get daily and weekly hours 
 - [Overtime pay calculator](https://matt5516.github.io/time-card-calc/overtime-pay-calculator/): Regular, overtime and double-time hours at your rate: the gross pay line by line.
 - [Biweekly timesheet](https://matt5516.github.io/time-card-calc/biweekly-timesheet/): Two weeks of in and out times, with overtime tested week by week and period totals.
 - [Military time converter](https://matt5516.github.io/time-card-calc/military-time-converter/): 12-hour to 24-hour time and back, with a full 24-hour chart.
+- [Pay periods in 2027](https://matt5516.github.io/time-card-calc/how-many-pay-periods-in-2027/): List every 2027 payday for weekly, biweekly, semimonthly or monthly pay, plus 3-paycheck months.
 - [Hourly to salary calculator](https://matt5516.github.io/time-card-calc/hourly-to-salary-calculator/): Hourly pay to annual, monthly, biweekly and weekly, and back. Pre-tax.
 
 ## Popular guides

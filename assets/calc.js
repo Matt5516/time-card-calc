@@ -154,7 +154,25 @@ function salaryToHourly(o){
   var hr = d > 0 ? a / d : 0; return {hourly: r2(hr), monthly: r2(a / 12), biweekly: r2(a / 26), weekly: r2(a / 52), hoursYear: round(d, 2)};
 }
 
-var api = {parse24: parse24, format24: format24, spoken24: spoken24, chart24: chart24, hourlyToSalary: hourlyToSalary, salaryToHourly: salaryToHourly, parseTime: parseTime, parseDuration: parseDuration, durationMinutes: durationMinutes, formatHM: formatHM, formatClock: formatClock, toDecimal: toDecimal, fromDecimal: fromDecimal,
+// ---- Pay periods in a year. Dates are handled as whole days since 1970-01-01 (UTC), so time zones and daylight saving never matter.
+function dayNum(y,m,d){ return Math.floor(Date.UTC(y,m-1,d)/86400000); }
+function dayInfo(n){ var t=new Date(n*86400000), y=t.getUTCFullYear(), m=t.getUTCMonth()+1, d=t.getUTCDate();
+  return {n:n, y:y, m:m, d:d, dow:t.getUTCDay(), iso:y+'-'+(m<10?'0':'')+m+'-'+(d<10?'0':'')+d}; }
+function parseISO(s){ var x=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s||'')); if(!x) return null; var y=+x[1], m=+x[2], d=+x[3], n=dayNum(y,m,d), i=dayInfo(n); return (i.y===y&&i.m===m&&i.d===d)? n : null; }
+// o: {freq:'weekly'|'biweekly'|'semimonthly'|'monthly', year, anchor:'YYYY-MM-DD' (any known payday of a weekly/biweekly schedule, in any year), shift:'prev' (semimonthly/monthly only: a payday on a weekend moves to the Friday before; holidays are not considered)}
+// Semimonthly = the 15th and the last day of each month; monthly = the last day of each month. Returns {freq, year, dates:[dayInfo], count, perMonth:[12], extraMonths:[1..12], base}
+function paydays(o){
+  var year=+o.year, f=o.freq, dates=[], jan1=dayNum(year,1,1), dec31=dayNum(year,12,31);
+  if(f==='weekly'||f==='biweekly'){ var a=parseISO(o.anchor), step=f==='weekly'?7:14; if(a==null) return null;
+    var k=Math.ceil((jan1-a)/step); for(var n=a+k*step; n<=dec31; n+=step) dates.push(dayInfo(n)); }
+  else { for(var m=1;m<=12;m++){ var last=dayNum(year,m+1,1)-1, nom=f==='monthly'? [last] : [dayNum(year,m,15), last];
+      nom.forEach(function(n){ var i=dayInfo(n); if(o.shift==='prev'){ if(i.dow===6) n-=1; else if(i.dow===0) n-=2; i=dayInfo(n); } if(i.y===year) dates.push(i); }); } }
+  var per=[0,0,0,0,0,0,0,0,0,0,0,0]; dates.forEach(function(i){ per[i.m-1]++; });
+  var base=f==='weekly'?4:(f==='biweekly'?2:null), extra=[];
+  if(base!=null) per.forEach(function(c,i){ if(c>base) extra.push(i+1); });
+  return {freq:f, year:year, dates:dates, count:dates.length, perMonth:per, extraMonths:extra, base:base};
+}
+var api = {paydays: paydays, parseISO: parseISO, dayInfo: dayInfo, dayNum: dayNum, parse24: parse24, format24: format24, spoken24: spoken24, chart24: chart24, hourlyToSalary: hourlyToSalary, salaryToHourly: salaryToHourly, parseTime: parseTime, parseDuration: parseDuration, durationMinutes: durationMinutes, formatHM: formatHM, formatClock: formatClock, toDecimal: toDecimal, fromDecimal: fromDecimal,
   hoursBetween: hoursBetween, dayNet: dayNet, splitDay: splitDay, weekTotals: weekTotals, periodTotals: periodTotals, overtimePay: overtimePay, minuteTable: minuteTable, r2: r2, round: round};
 if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.TCCalc = api;
 })(typeof window !== 'undefined' ? window : this);
