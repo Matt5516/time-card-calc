@@ -41,7 +41,7 @@ addEventListener('DOMContentLoaded',function(){ 'use strict';
       var av=a.value.trim(), bv=b.value.trim(), errs=[], i=null, o=null; bad(a,false); bad(b,false);
       if(!av&&!bv) return {r:null,errs:errs,empty:true};
       if(av){ i=C.parseTime(av,after!=null?{assume:'next',after:after}:{assume:'am'}); if(i==null){ errs.push('Can’t read “'+av+'” as a '+name+' in time. Try 9a, 9:30 or 1730.'); bad(a,true); } } else { errs.push('Add a '+name+' in time.'); bad(a,true); }
-      if(bv){ o=C.parseTime(bv,i!=null?{assume:'next',after:i}:{assume:'pm'}); if(o==null){ errs.push('Can’t read “'+bv+'” as a '+name+' out time. Try 5p, 17:30 or 1730.'); bad(b,true); } } else { errs.push('Add a '+name+' out time.'); bad(b,true); }
+      if(bv){ o=C.parseTime(bv,i!=null?{assume:'next',after:i}:{assume:'pm'}); if(o==null){ errs.push('Can’t read “'+bv+'” as a '+name+' out time. Try 5p or 17:30.'); bad(b,true); } } else { errs.push('Add a '+name+' out time.'); bad(b,true); }
       return {r:i!=null&&o!=null?[i,o]:null,errs:errs};
     }
     function readDay(pre,wd,splitOn){
@@ -49,9 +49,9 @@ addEventListener('DOMContentLoaded',function(){ 'use strict';
       var p1=pair(g('i'),g('o'),null,DAY[wd].slice(0,3)); errs=errs.concat(p1.errs); if(p1.r){ punches.push(p1.r); times.push(p1.r); }
       var p2={empty:true}; if(splitOn){ p2=pair(g('j'),g('p'),p1.r?p1.r[1]:null,'second'); errs=errs.concat(p2.errs); if(p2.r){ punches.push(p2.r); times.push(p2.r); } }
       var bv=g('b').value.trim(), brk=0; bad(g('b'),false);
-      if(bv){ brk=C.parseDuration(bv,{bare:'min'}); if(brk==null){ errs.push('Break should be minutes (30) or h:mm (0:30).'); bad(g('b'),true); brk=0; } }
+      if(bv){ brk=C.parseDuration(bv,{bare:'min'}); if(brk==null){ errs.push('Enter the break in minutes (30) or h:mm (0:30).'); bad(g('b'),true); brk=0; } }
       var gross=0; punches.forEach(function(p){ gross+=C.durationMinutes(p[0],p[1]); });
-      if(brk>gross&&gross>0) errs.push('The break is longer than the shift, so the day counts as 0.');
+      if(brk>gross&&gross>0) errs.push('The break is longer than the shift, so this day counts as 0.');
       else if(gross>16*60) errs.push('That shift is over 16 hours. Check am/pm.');
       var day={punches:punches,breakMin:brk}, net=C.dayNet(day), empty=!!(p1.empty&&p2.empty&&!bv);
       $(id+'n').textContent=empty?'':net>0||punches.length?C.formatHM(net)+' · '+dec2(net):'';
@@ -74,11 +74,11 @@ addEventListener('DOMContentLoaded',function(){ 'use strict';
       var wts=all.map(function(rs){ return C.weekTotals(rs.map(function(r){ return r.day; }),o); }), P=C.periodTotals(all.map(function(rs){ return rs.map(function(r){ return r.day; }); }),o);
       var name=($('emp').value||'').trim(), we=dateLabel($('we').value), per=weeks===2?'Pay period':'Week';
       var showOT=o.ot!=='none', hasRate=o.rate>0;
-      if(!any){ out.innerHTML='<div class="empty">'+UI.icon('clock')+'<p><strong>Enter your in and out times</strong><br>Try 9a and 5:30p, or 0900 and 1730.</p></div>'; last=''; sync(KEY,SKIP); return; }
+      if(!any){ out.innerHTML='<div class="empty">'+UI.icon('clock')+'<p><strong>Type your in and out times</strong><br>Try 9a and 5:30p, or 0900 and 1730.</p></div>'; last=''; sync(KEY,SKIP); return; }
       var h='<div class="tc-print"><h2>Timesheet'+(weeks===2?' (two weeks)':'')+'</h2><p><strong>Employee:</strong> '+(name?esc(name):'______________________')+' &nbsp; <strong>'+(weeks===2?'Last week ending':'Week ending')+':</strong> '+(we||'______________')+'</p></div>';
       h+='<h2>'+UI.icon('clock')+per+' total: '+C.formatHM(P.totalMin)+' ('+dec2(P.totalMin)+' hours)</h2>';
       var ot=P.otMin+P.dtMin;
-      h+='<div class="verdict '+(ot>0?'warn':'good')+'"><span class="vicon">'+UI.icon(ot>0?'dollar':'check')+'</span><div><strong class="big">'+(showOT?(ot>0?both(ot)+' of overtime'+(P.dtMin?' (including '+C.formatHM(P.dtMin)+' double time)':''):'No overtime'):both(P.totalMin)+' worked')+(hasRate?'. Gross pay '+money(P.gross)+'.':'.')+'</strong><span>'+(anyErr?'Some entries need a fix (shown under each day); those days count as entered so far. ':'')+(showOT?({weekly:'Weekly rule: hours over 40 in a workweek at '+o.otMult+'×.',daily:'Daily rule: hours over 8 in a day at '+o.otMult+'×'+(o.dt?', over 12 at '+o.dtMult+'×':'')+'.',both:'Daily rules first, then regular hours past 40 in the week at '+o.otMult+'×.'})[o.ot]:'No overtime rule selected.')+(weeks===2?' Each week is tested on its own.':'')+'</span></div></div>';
+      h+='<div class="verdict '+(ot>0?'warn':'good')+'"><span class="vicon">'+UI.icon(ot>0?'dollar':'check')+'</span><div><strong class="big">'+(showOT?(ot>0?both(ot)+' of overtime'+(P.dtMin?' (including '+C.formatHM(P.dtMin)+' double time)':''):'No overtime'):both(P.totalMin)+' worked')+(hasRate?'. Gross pay '+money(P.gross)+'.':'.')+'</strong><span>'+(anyErr?'Fix the flagged entries. Those days are left out until you do.':'')+(showOT?({weekly:'Weekly rule: hours over 40 in a workweek at '+o.otMult+'×.',daily:'Daily rule: hours over 8 in a day at '+o.otMult+'×'+(o.dt?', over 12 at '+o.dtMult+'×':'')+'.',both:'Daily rules first, then regular hours past 40 in the week at '+o.otMult+'×.'})[o.ot]:'No overtime rule picked.')+(weeks===2?' Each week is tested on its own.':'')+'</span></div></div>';
       h+='<div class="stats s3">'+stat('Total hours',C.formatHM(P.totalMin))+stat('Decimal hours',dec2(P.totalMin))+stat('Regular',C.formatHM(P.regMin))+(showOT?stat('Overtime',C.formatHM(P.otMin))+stat('Double time',C.formatHM(P.dtMin)):'')+(hasRate?stat('Gross pay',money(P.gross),'pos'):'')+'</div>';
       all.forEach(function(rs,wi){ var wt=wts[wi]; if(weeks===2) h+='<h3 class="tc-wk">Week '+(wi+1)+': '+both(wt.totalMin)+(showOT&&(wt.otMin+wt.dtMin)?', overtime '+C.formatHM(wt.otMin+wt.dtMin)+(hasRate?', '+money(wt.gross):''):'')+'</h3>'; h+=dayTable(rs,wt,showOT); });
       if(hasRate){ h+='<div class="table-scroll"><table class="tc-table"><caption class="sr-only">Gross pay by line</caption><thead><tr><th scope="col">Pay line</th><th scope="col">Hours</th><th scope="col">Rate</th><th scope="col">Pay</th></tr></thead><tbody>'
@@ -105,12 +105,12 @@ addEventListener('DOMContentLoaded',function(){ 'use strict';
       var s=C.parseTime(a,{assume:'am'}), e=s!=null?C.parseTime(b,{assume:'next',after:s}):C.parseTime(b,{assume:'pm'}), br=bk===''?0:C.parseDuration(bk,{bare:'min'});
       if(s==null) errs.push(a?'Can’t read the start time “'+esc(a)+'”. Try 8:15a, 9:30 or 0815.':'Enter a start time.');
       if(e==null) errs.push(b?'Can’t read the end time “'+esc(b)+'”. Try 4:45p, 17:30 or 1645.':'Enter an end time.');
-      if(br==null) errs.push('Break should be minutes (30) or h:mm (0:30).');
+      if(br==null) errs.push('Enter the break in minutes (30) or h:mm (0:30).');
       ['st','en','bk'].forEach(function(id,i){ var el=$(id); if((i===0&&s==null)||(i===1&&e==null)||(i===2&&br==null)) el.setAttribute('aria-invalid','true'); else el.removeAttribute('aria-invalid'); });
       if(errs.length){ out.innerHTML='<div class="alert err">'+UI.icon('alert')+'<span>'+errs.join(' ')+'</span></div>'; last=''; history.replaceState(null,'',UI.stateURL()); return; }
       var gross=C.durationMinutes(s,e), net=C.hoursBetween(s,e,br), over=e<s;
       var h='<h2>'+UI.icon('clock')+C.formatClock(s)+' to '+C.formatClock(e)+'</h2>';
-      h+='<div class="verdict good"><span class="vicon">'+UI.icon('check')+'</span><div><strong class="big">'+Math.floor(net/60)+' hours '+(net%60)+' minutes</strong><span>'+dec2(net)+' decimal hours'+(over?'. The end time is earlier than the start, so this counts as the next day.':'.')+(br?' Break of '+br+' min subtracted from '+C.formatHM(gross)+'.':'')+(br>gross?' The break is longer than the span, so the answer is 0.':'')+'</span></div></div>';
+      h+='<div class="verdict good"><span class="vicon">'+UI.icon('check')+'</span><div><strong class="big">'+Math.floor(net/60)+' hours '+(net%60)+' minutes</strong><span>'+dec2(net)+' decimal hours'+(over?'. The end is earlier than the start, so it counts as the next day.':'.')+(br?' Break of '+br+' min subtracted from '+C.formatHM(gross)+'.':'')+(br>gross?' The break is longer than the span, so you get 0.':'')+'</span></div></div>';
       h+='<div class="stats s3">'+stat('Hours:minutes',C.formatHM(net))+stat('Decimal hours',dec2(net))+stat('Total minutes',String(net))+(br?stat('Before break',C.formatHM(gross)):'')+'</div>'+ACT;
       out.innerHTML=h; last=C.formatClock(s)+' to '+C.formatClock(e)+(br?' minus '+br+' min break':'')+' = '+C.formatHM(net)+' ('+dec2(net)+' hours). '+location.href; history.replaceState(null,'',UI.stateURL()); }
     copyBtn(function(){ return last; }); hb.addEventListener('input',UI.debounce(render,40)); render(); })(); }
@@ -120,7 +120,7 @@ addEventListener('DOMContentLoaded',function(){ 'use strict';
   if(dc){ (function(){ var out=$('dcOut'), last=''; initState(null);
     function render(){ var hh=Math.max(0,Math.floor(num('hh',0))), mm=Math.max(0,num('mm',0)), tot=hh*60+mm, dv=num('dc',0), mins=C.fromDecimal(Math.max(0,dv));
       var h='<h2>'+UI.icon('swap')+'Hours and minutes ↔ decimal</h2><div class="verdict good"><span class="vicon">'+UI.icon('check')+'</span><div><strong class="big">'+hh+':'+(mm<10?'0':'')+Math.round(mm)+' = '+C.toDecimal(tot,4)+' decimal hours</strong><span>'+(mm>=60?Math.round(mm)+' minutes is '+C.formatHM(mm)+', so the total is '+C.formatHM(tot)+'. ':'')+Math.round(mm)+' ÷ 60 = '+C.toDecimal(mm,4)+', plus '+hh+' hours. Rounded to 2 decimals: '+dec2(tot)+'.</span></div></div>';
-      h+='<div class="verdict warn"><span class="vicon">'+UI.icon('swap')+'</span><div><strong class="big">'+(dv>=0?dv+' decimal hours = '+C.formatHM(mins):'Enter a decimal of 0 or more')+'</strong><span>'+(dv>=0?'The decimal part × 60 gives the minutes: '+(Math.round((dv-Math.floor(dv))*6000)/100)+' minutes.':'')+'</span></div></div>'+ACT;
+      h+='<div class="verdict warn"><span class="vicon">'+UI.icon('swap')+'</span><div><strong class="big">'+(dv>=0?dv+' decimal hours = '+C.formatHM(mins):'Enter 0 or more')+'</strong><span>'+(dv>=0?'The decimal part × 60 gives the minutes: '+(Math.round((dv-Math.floor(dv))*6000)/100)+' minutes.':'')+'</span></div></div>'+ACT;
       out.innerHTML=h; last=hh+':'+(mm<10?'0':'')+Math.round(mm)+' = '+C.toDecimal(tot,4)+' h; '+dv+' h = '+C.formatHM(mins)+'. '+location.href; history.replaceState(null,'',UI.stateURL()); }
     copyBtn(function(){ return last; }); dc.addEventListener('input',UI.debounce(render,40)); render(); })(); }
 
@@ -131,9 +131,9 @@ addEventListener('DOMContentLoaded',function(){ 'use strict';
       if(v.indexOf(':')>=0){ var mn=C.parseDuration(v); r=mn==null?NaN:mn/60; } else r=/^\d+(\.\d+)?$/.test(v)?parseFloat(v):NaN;
       if(isNaN(r)){ el.setAttribute('aria-invalid','true'); return null; } return r; }
     function render(){ var reg=hrs('rh'), ot=hrs('oh'), dt=hrs('dh'), rate=num('rt',0), om=Math.max(1,num('om',1.5)), dm=Math.max(1,num('dm',2));
-      if(reg==null||ot==null||dt==null){ out.innerHTML='<div class="alert err">'+UI.icon('alert')+'<span>Hours should be decimals like 7.5 or h:mm like 7:30.</span></div>'; last=''; history.replaceState(null,'',UI.stateURL()); return; }
+      if(reg==null||ot==null||dt==null){ out.innerHTML='<div class="alert err">'+UI.icon('alert')+'<span>Enter hours as decimals (7.5) or h:mm (7:30).</span></div>'; last=''; history.replaceState(null,'',UI.stateURL()); return; }
       var p=C.overtimePay({reg:reg,ot:ot,dt:dt,rate:rate,otMult:om,dtMult:dm}), tot=reg+ot+dt;
-      if(!tot||!rate){ out.innerHTML='<div class="empty">'+UI.icon('dollar')+'<p><strong>Enter hours and an hourly rate</strong><br>For example 40 regular and 5 overtime hours at $20.</p></div>'; last=''; history.replaceState(null,'',UI.stateURL()); return; }
+      if(!tot||!rate){ out.innerHTML='<div class="empty">'+UI.icon('dollar')+'<p><strong>Add hours and an hourly rate</strong><br>Try 40 regular and 5 overtime hours at $20.</p></div>'; last=''; history.replaceState(null,'',UI.stateURL()); return; }
       var h='<h2>'+UI.icon('dollar')+'Gross pay: '+money(p.gross)+'</h2><div class="verdict good"><span class="vicon">'+UI.icon('check')+'</span><div><strong class="big">'+money(p.gross)+' for '+C.round(tot,2)+' hours</strong><span>Overtime pays '+money(p.otRate)+' an hour ('+om+'×'+(dt?', double time '+money(p.dtRate)+' at '+dm+'×':'')+'). Average '+money(p.gross/tot)+' an hour. Before taxes and deductions.</span></div></div>';
       h+='<div class="table-scroll"><table class="tc-table"><caption class="sr-only">Gross pay by line</caption><thead><tr><th scope="col">Pay line</th><th scope="col">Hours</th><th scope="col">Rate</th><th scope="col">Pay</th></tr></thead><tbody>'
         +'<tr><th scope="row">Regular</th><td>'+C.round(reg,2)+'</td><td>'+money(rate)+'</td><td>'+money(p.regPay)+'</td></tr>'
